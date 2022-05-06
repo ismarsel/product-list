@@ -1,33 +1,53 @@
 <template>
   <form 
-  class="product-add"
-  >
-        <label class="require" for="text">Наименование товара</label>
-        <input type="text" name="name" placeholder="Введите наименование товара">
-        
-        <label for="description">Описание товара</label>
-        <textarea name="description" placeholder="Введите описание товара"></textarea>
-        
-        <label class="require" for="img-link">Ссылка на изоображение товара</label>
-        <input type="url" name="img-link" placeholder="Введите ссылку">
-        
-        <label class="require" for="price">Цена товара</label>
-        <input type="text" name="price" placeholder="Введите цену">
-        
-        <input type="submit" class="btn-reset add-btn" value="Добавить товар">
-      </form>
+  @submit.prevent="onSubmit"
+  class="product-add">
+    <label class="require" for="text">Наименование товара</label>
+    <input v-model="name" type="text" name="name" placeholder="Введите наименование товара">
+    
+    <label for="description">Описание товара</label>
+    <textarea v-model="description" name="description" placeholder="Введите описание товара"></textarea>
+    
+    <label class="require" for="img-link">Ссылка на изоображение товара</label>
+    <input v-model="image" type="url" name="img-link" placeholder="Введите ссылку">
+    
+    <label class="require" for="price">Цена товара</label>
+    <input v-model="price" type="text" name="price" placeholder="Введите цену">
+    
+    <input type="submit" class="btn-reset add-btn" value="Добавить товар">
+  </form>
 
 </template>
 
 <script>
 export default {
- 
+  data () {
+    return {
+      name: '',
+      description: '',
+      image: '',
+      price: 0,
+    }
+  },
+  methods: {
+    onSubmit() {
+      this.$emit('onSubmit', {
+        id: Date.now(),
+        name: this.name,
+        description: this.description,
+        image: this.image,
+        price: this.price
+      })
+    }
+  }
 }
 </script>
 
 <style scoped>
 
   .product-add {
+    flex: 0 0 332px;
+    align-self: flex-start;
     width: 332px;
     display: flex;
     flex-direction: column;

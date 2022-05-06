@@ -1,6 +1,9 @@
 <template>
       <ul class="product-list">
-        <product-list-item />
+        <product-list-item
+        v-for="product in products"
+        :key="product.id"
+        :product="product" />
       </ul>
 </template>
 
@@ -8,13 +11,21 @@
 import ProductListItem from '@/components/ProductListItem.vue'
 
 export default {
+  name: 'ProductList',
   components: { ProductListItem },
+  props: {
+    products: {
+      type: Array,
+      reqired: true,
+    }
+  },
   
 }
 </script>
 
 <style scoped>
   .product-list {
+    align-self: flex-start;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
