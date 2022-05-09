@@ -1,20 +1,50 @@
 <template>
   <form 
   @submit.prevent="onSubmit"
-  class="product-add">
+  class="product-add"
+  novalidate>
     <label class="require" for="text">Наименование товара</label>
-    <input v-model="name" type="text" name="name" placeholder="Введите наименование товара">
-    
+    <input  v-model.trim="name"
+            :class="{ novalid: isNameValid }" 
+            type="text" 
+            name="name" 
+            placeholder="Введите наименование товара">
+    <transition name="fade">
+    <span v-if="isNameValid"
+          class="novalid-message">Поле является ообязательным
+    </span>
+    </transition>
     <label for="description">Описание товара</label>
-    <textarea v-model="description" name="description" placeholder="Введите описание товара"></textarea>
+    <textarea v-model.trim="description" name="description" placeholder="Введите описание товара"></textarea>
     
     <label class="require" for="img-link">Ссылка на изоображение товара</label>
-    <input v-model="image" type="url" name="img-link" placeholder="Введите ссылку">
-    
+    <input v-model="image"
+           :class="{ novalid: !this.image.length }"
+           type="url"
+           name="img-link"
+           placeholder="Введите ссылку">
+    <transition name="fade">
+    <span v-if="isImageValid"
+          class="novalid-message">Поле является ообязательным
+    </span>
+    </transition>
     <label class="require" for="price">Цена товара</label>
-    <input v-model="price" type="text" name="price" placeholder="Введите цену">
-    
-    <input type="submit" class="btn-reset add-btn" value="Добавить товар">
+    <input v-model.number="price"
+           :class="{ novalid: !this.price }"
+           type="text" 
+           name="price" 
+           placeholder="Введите цену">
+    <transition name="fade">
+    <span v-if="isPriceValid"
+          class="novalid-message">Поле является ообязательным
+    </span>
+    </transition>
+    <input
+    :disabled="!isValid"
+    type="submit"
+    :class="{ valid: isValid }"
+    class="btn-reset add-btn" 
+    value="Добавить товар">
   </form>
 
 </template>
@@ -26,7 +56,21 @@ export default {
       name: '',
       description: '',
       image: '',
-      price: 0,
+      price: null,
+    }
+  },
+  computed: {
+    isNameValid () {
+      return !this.name.length
+    },
+    isImageValid () {
+      return !this.image.length
+    },
+    isPriceValid () {
+      return !this.price
+    },
+    isValid () {
+      return (this.name.length && this.image.length && this.price)
     }
   },
   methods: {
@@ -36,8 +80,12 @@ export default {
         name: this.name,
         description: this.description,
         image: this.image,
-        price: this.price
+        price: this.price,
       })
+      this.name = ''
+      this.description = ''
+      this.image = ''
+      this.price = ''
     }
   }
 }
@@ -116,4 +164,24 @@ export default {
     transition: all .25s ease;
     -webkit-transition: all .25s ease;
   }
+  .novalid-message {
+    font-size: 8px;
+    color:#FF8484;
+  }
+  .novalid {
+    border: #FF8484 1px solid  !important;
+  }
+  .valid {
+    background: #7BAE73;
+    color: #fff;
+  }
+  .fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
