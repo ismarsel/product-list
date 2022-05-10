@@ -1,12 +1,12 @@
 <template>
   <li class="product-list__item card">
     <div class="card__img">
-      <img :src="product.image" :alt="product.name" />
+      <img src="../assets/images/photo.jpg" :alt="product.name" />
     </div>
     <div class="card__text">
       <h2 class="card__title">{{ product.name }}</h2>
       <p class="card__description">{{ product.description }}</p>
-      <span class="card__price">{{ product.price }}</span>
+      <span class="card__price">{{ formatPrice }}</span>
     </div>
   </li>
 </template>
@@ -19,6 +19,16 @@ export default {
       type: Object,
       reqired: true,
     },
+  },
+  computed: {
+    formatPrice() { 
+    return this.product.price.toString()
+    .split('')
+    .reverse()
+    .map((char, i) => char + (i % 3 ? '' : ' '))
+    .reverse()
+    .join('')
+    }
   },
 };
 </script>
